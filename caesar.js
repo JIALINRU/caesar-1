@@ -14,13 +14,10 @@ function shift(value, numberOfShifts) {
   return ret;
 }
 
-function encode(value, numberOfShifts) {
+exports.encode = function(value, numberOfShifts) {
   return shift(value, numberOfShifts);
-}
+};
 
-function decode(value, numberOfShifts) {
+exports.decode = function(value, numberOfShifts) {
   return shift(value, numberOfShifts * -1);
 }
-
-console.log("ABC encoded: " + encode("ABC", 2));
-console.log("ABC encoded and decoded: " + decode(encode("ABC", 2), 2));
