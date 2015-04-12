@@ -14,10 +14,20 @@ function shift(value, numberOfShifts) {
   return ret;
 }
 
-exports.encode = function(value, numberOfShifts) {
+function encode(value, numberOfShifts) {
   return shift(value, numberOfShifts);
 };
 
-exports.decode = function(value, numberOfShifts) {
+function decode(value, numberOfShifts) {
   return shift(value, numberOfShifts * -1);
 }
+
+var Transform = require('stream').Transform;
+
+exports.createEncodeStream = function(numberOfShifts) {
+  var stream = new Transform();
+  stream._transform = function(chunk) {
+    stream.push(encode(chunk.toString(), numberOfShifts));
+  };
+  return stream;
+};
