@@ -24,10 +24,18 @@ function decode(value, numberOfShifts) {
 
 var Transform = require('stream').Transform;
 
-exports.createEncodeStream = function(numberOfShifts) {
+function createStream(numberOfShifts, shifter) {
   var stream = new Transform();
   stream._transform = function(chunk) {
-    stream.push(encode(chunk.toString(), numberOfShifts));
+    stream.push(shifter(chunk.toString(), numberOfShifts));
   };
   return stream;
+};
+
+exports.createEncodeStream = function(numberOfShifts) {
+  return createStream(numberOfShifts, encode);
+};
+
+exports.createDecodeStream = function(numberOfShifts) {
+  return createStream(numberOfShifts, decode);
 };
