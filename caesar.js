@@ -26,8 +26,9 @@ var Transform = require('stream').Transform;
 
 function createStream(numberOfShifts, shifter) {
   var stream = new Transform();
-  stream._transform = function(chunk) {
+  stream._transform = function(chunk, encoding, next) {
     stream.push(shifter(chunk.toString(), numberOfShifts));
+    next();
   };
   return stream;
 };
