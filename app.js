@@ -1,19 +1,15 @@
-var caesar = require('./caesar.js');
 var fs = require('fs');
+var http = require('http');
 
-if (process.argv.length !== 4) {
-  console.log('Usage: node app.js <filename> <numberOfShifts>');
-  process.exit(1);
-}
+var options = {
+  server: 'localhost',
+  port: 1337,
+  method: 'POST'
+};
 
-var numberOfShifts = parseInt(process.argv[3], 10);
-var fileName = process.argv[2];
+var request = http.request(options, function(res) {
+  res.pipe(process.stdout);
+});
 
-var caesarEncodeStream = caesar.createEncodeStream(numberOfShifts);
-var caesarDecodeStream = caesar.createDecodeStream(numberOfShifts);
-var fileStream = fs.createReadStream(fileName, { encoding: 'utf8' });
-
-fileStream
-  .pipe(caesarEncodeStream)
-  .pipe(caesarDecodeStream)
-  .pipe(process.stdout);
+fs.createReadStream('message.txt')
+  .pipe(request);
